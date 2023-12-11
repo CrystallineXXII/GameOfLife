@@ -1,8 +1,11 @@
 import pygame as pg
 import sys
 import time
+
 # VARIABLES------------------------------------------------------------------
 TimePeriod = 1 / 10
+
+
 # ---------------------------------------------------------------------------
 # CLASSES--------------------------------------------------------------------
 class Cell:
@@ -50,14 +53,18 @@ class Cell:
         else:
             if self.get_live_neighbours(CELLS) == 3:
                 self.alive = True
+
+
 # ---------------------------------------------------------------------------
 # INITIALIZATION-------------------------------------------------------------
 CELLS = [[Cell(x, y) for y in range(38)] for x in range(38)]
 pg.init()
 screen = pg.display.set_mode((760, 800))
 pg.display.set_caption("Conway's Game of Life")
-font = pg.font.Font("Comfortaa.ttf", 30)
+font = pg.font.Font("Nexa.ttf", 30)
 clock = pg.time.Clock()
+
+
 # ---------------------------------------------------------------------------
 # FUNCTIONS------------------------------------------------------------------
 def draw_grid():
@@ -70,6 +77,8 @@ def draw_grid():
         )
 
     pg.draw.rect(screen, "#dddddd", pg.Rect(0, 0, 761, 761), 2)
+
+
 # ---------------------------------------------------------------------------
 def create():
     while True:
@@ -95,11 +104,13 @@ def create():
                 cell.draw(screen)
         draw_grid()
 
-        label = font.render(f"Edit mode... FPS : {clock.get_fps():.0f}", 1, "#ffffff")
+        label = font.render(f"Edit mode. FPS : {clock.get_fps():.0f}", 1, "#ffffff")
 
         screen.blit(label, label.get_rect(center=(380, 780)))
         clock.tick(60)
         pg.display.update()
+
+
 # ---------------------------------------------------------------------------
 def run():
     global CELLS
@@ -117,6 +128,9 @@ def run():
                 sys.exit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
+                    return create
+                if event.key == pg.K_r:
+                    CELLS = [[Cell(x, y) for y in range(38)] for x in range(38)]
                     return create
 
         CELLS_COPY = [[Cell(x, y) for y in range(38)] for x in range(38)]
@@ -149,10 +163,30 @@ def run():
         screen.blit(label, label.get_rect(center=(380, 780)))
         clock.tick(60)
         pg.display.update()
+
+
 # ---------------------------------------------------------------------------
+def intro():
+    label = font.render("Press SPACE to start", 1, "#ffffff")
+    logo = pg.image.load("Assets/logo.png").convert_alpha()
+    logo = pg.transform.rotozoom(logo, 0, 0.75)
+    while True:
+        screen.fill((0, 0, 0))
+        screen.blit(label, label.get_rect(center=(380, 780)))
+        screen.blit(logo, logo.get_rect(center=(380, 380)))
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    return create
+        pg.display.update()
+
+
 # ENTRY-POINT----------------------------------------------------------------
 if __name__ == "__main__":
-    func = create
+    func = intro
     while True:
         func = func()
 # ---------------------------------------------------------------------------
