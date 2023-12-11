@@ -19,4 +19,4 @@ The universe of the Game of Life is an infinite two-dimensional orthogonal grid 
 | ---------- | ----------------- |
 | Left Click | Toggle cell state |
 | Space      | Pause/Unpause     |
-| R          | Reset             |
+| <R>        | Reset             |
